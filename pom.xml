@@ -42,6 +42,31 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <include>**/Test*.java,**/*Test.java,**/*Tests.java,**/*TestCase.java</include>
+        <exclude/>
+        <groups/>
+        <excludedGroups>quarantine</excludedGroups>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+
+        <!-- required for running tests on JDK11+ -->
+        <test.additional.args>
+            --add-opens java.base/jdk.internal.loader=ALL-UNNAMED
+            --add-opens java.base/java.lang=ALL-UNNAMED <!--Mockito-->
+            --add-opens java.base/java.io=ALL-UNNAMED <!--Bookkeeper NativeIO -->
+            --add-opens java.base/sun.net=ALL-UNNAMED <!--netty.DnsResolverUtil-->
+            --add-opens java.management/sun.management=ALL-UNNAMED <!--JvmDefaultGCMetricsLogger-->
+        </test.additional.args>
+        <testReuseFork>true</testReuseFork>
+        <testForkCount>4</testForkCount>
+        <testRealAWS>false</testRealAWS>
+        <testRetryCount>1</testRetryCount>
+        <testJacocoAgentArgument/>
+        <testHeapDumpPath>/tmp</testHeapDumpPath>
+
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <!-- keep using okhttp3 3.x for Presto -->
         <okhttp3.version>3.14.9</okhttp3.version>
@@ -1328,6 +1353,44 @@
                         <arg>-Xlint:-classfile</arg>
                         <arg>-Xlint:-processing</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>${include}</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*$*,${exclude}</exclude>
+                    </excludes>
+                    <groups>${groups}</groups>
+                    <excludedGroups>${excludedGroups}</excludedGroups>
+                    <argLine>${testJacocoAgentArgument} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${testHeapDumpPath} -XX:+ExitOnOutOfMemoryError -Xmx1G -XX:+UseZGC
+                        -Dpulsar.allocator.pooled=true
+                        -Dpulsar.allocator.leak_detection=Advanced
+                        -Dpulsar.allocator.exit_on_oom=false
+                        -Dpulsar.allocator.out_of_memory_policy=FallbackToHeap
+                        -Dio.netty.tryReflectionSetAccessible=true
+                        ${test.additional.args}
+                    </argLine>
+                    <reuseForks>${testReuseFork}</reuseForks>
+                    <forkCount>${testForkCount}</forkCount>
+                    <shutdown>kill</shutdown>
+                    <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <testRealAWS>${testRealAWS}</testRealAWS>
+                        <testRetryCount>${testRetryCount}</testRetryCount>
+                    </systemPropertyVariables>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>org.apache.pulsar.tests.PulsarTestListener,org.apache.pulsar.tests.AnnotationListener,org.apache.pulsar.tests.FailFastNotifier,org.apache.pulsar.tests.MockitoCleanupListener,org.apache.pulsar.tests.FastThreadLocalCleanupListener,org.apache.pulsar.tests.ThreadLeakDetectorListener</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
         </plugins>
