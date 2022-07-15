@@ -26,6 +26,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>pulsar-trino-connector-original</module>
+        <module>pulsar-trino-connector</module>
     </modules>
     <parent>
         <groupId>org.apache</groupId>
