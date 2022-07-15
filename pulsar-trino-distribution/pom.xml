@@ -332,7 +332,7 @@
                 <configuration>
                     <licenseSets>
                         <licenseSet>
-                            <header>../../src/license-header.txt</header>
+                            <header>${pulsar-trino.basedir}/tools/ci/license-header.txt</header>
                         </licenseSet>
                     </licenseSets>
                     <mapping>
