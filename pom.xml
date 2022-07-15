@@ -27,6 +27,7 @@
     <modules>
         <module>pulsar-trino-connector-original</module>
         <module>pulsar-trino-connector</module>
+        <module>pulsar-trino-distribution</module>
     </modules>
     <parent>
         <groupId>org.apache</groupId>
