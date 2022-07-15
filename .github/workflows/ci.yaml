@@ -40,14 +40,6 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - name: Tune Runner VM
-        uses: ./.github/actions/tune-runner-vm
-
-      - name: Setup ssh access to build runner VM
-        uses: ./.github/actions/ssh-access
-        with:
-          limit-access-to-actor: true
-
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
