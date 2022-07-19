@@ -31,7 +31,7 @@
 
     <artifactId>pulsar-trino-connector-original</artifactId>
     <description>Pulsar Trino - Pulsar Trino Connector</description>
-    <name>Pulsar Trini :: Pulsar Trino Connector Packaging</name>
+    <name>Pulsar Trini :: Pulsar Trino Connector</name>
 
     <properties>
         <jctools.version>2.1.2</jctools.version>
@@ -159,12 +159,6 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
             <version>${jetty.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
 
