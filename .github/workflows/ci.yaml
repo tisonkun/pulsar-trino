@@ -21,6 +21,7 @@ name: CI
 on:
   pull_request:
   push:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -56,7 +57,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: checkout
+      - name: Checkout Pulsar Main
         uses: actions/checkout@v2
         with:
           repository: apache/pulsar
@@ -65,14 +66,16 @@ jobs:
         working-directory: pulsar
         run: mvn -B -T 1C -ntp -Pcore-modules,-main clean install -DskipTests -Dlicense.skip=true -Drat.skip=true
 
-      - name: checkout
+      - name: Checkout Pulsar Trino
         uses: actions/checkout@v2
         with:
           path: pulsar-trino
       - name: Check source code license headers
         working-directory: pulsar-trino
         run: mvn -B -T 8 -ntp initialize apache-rat:check license:check
-      - name: Build
+      - name: Build Pulsar Trino
         working-directory: pulsar-trino
-        run: |
-          mvn -B -T 1C -ntp clean install -DskipTests
+        run: mvn -B -T 1C -ntp clean install -DskipTests
+      - name: Test Pulsar Trino
+        working-directory: pulsar-trino
+        run: mvn -B -T 1C -ntp verify
