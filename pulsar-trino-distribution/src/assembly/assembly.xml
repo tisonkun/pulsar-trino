@@ -35,7 +35,7 @@
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>${basedir}/src/main/resources/launcher.properties</source>
+            <source>${basedir}/src/main/resources/bin/launcher.properties</source>
             <destName>launcher.properties</destName>
             <outputDirectory>bin/</outputDirectory>
             <fileMode>644</fileMode>
@@ -43,8 +43,12 @@
     </files>
     <fileSets>
         <fileSet>
-            <directory>${basedir}/../presto-pulsar-plugin/target/pulsar-presto-connector/</directory>
+            <directory>${basedir}/../pulsar-trino-connector/target/pulsar-trino-connector/</directory>
             <outputDirectory>plugin/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/src/main/resources/conf/</directory>
+            <outputDirectory>conf/</outputDirectory>
         </fileSet>
     </fileSets>
     <dependencySets>
@@ -59,7 +63,7 @@
             </excludes>
         </dependencySet>
         <dependencySet>
-            <outputDirectory></outputDirectory>
+            <outputDirectory/>
             <includes>
                 <include>io.airlift:launcher:tar.gz:bin:${airlift.version}</include>
             </includes>
@@ -67,7 +71,7 @@
             <fileMode>755</fileMode>
         </dependencySet>
         <dependencySet>
-            <outputDirectory></outputDirectory>
+            <outputDirectory/>
             <includes>
                 <include>io.airlift:launcher:tar.gz:properties:${airlift.version}</include>
             </includes>

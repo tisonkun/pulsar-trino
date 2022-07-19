@@ -83,4 +83,6 @@
     <suppress checks="RegexpSinglelineJava" files="RedisSinkConfig.java"/>
     <!-- pulsar io solr -->
     <suppress checks="RegexpSinglelineJava" files="SolrSinkConfig.java"/>
+    <!-- properties -->
+    <suppress checks="LineLength" files="pulsar.properties"/>
 </suppressions>
